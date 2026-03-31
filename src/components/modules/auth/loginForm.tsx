@@ -173,12 +173,6 @@ export default function LoginForm() {
                     >
                       Password
                     </FieldLabel>
-                    <Link
-                      href="/forgot-password"
-                      className="text-sm text-green-600 hover:text-green-700 dark:text-green-500 dark:hover:text-green-400 transition-colors"
-                    >
-                      Forgot password?
-                    </Link>
                   </div>
                   <div className="relative group">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-green-500 transition-colors" />
@@ -210,22 +204,6 @@ export default function LoginForm() {
             }}
           </form.Field>
         </FieldGroup>
-
-        {/* Remember Me */}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="remember-me"
-            className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
-          />
-          <label
-            htmlFor="remember-me"
-            className="ml-2 text-sm text-gray-600 dark:text-gray-400"
-          >
-            Remember me for 30 days
-          </label>
-        </div>
-
         {/* Submit Button */}
         <Button
           type="submit"
