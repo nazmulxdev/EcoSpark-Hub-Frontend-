@@ -30,9 +30,9 @@ export const authClient = createAuthClient({
   ],
 });
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (callbackURL?: string) => {
   return await authClient.signIn.social({
     provider: "google",
-    callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    callbackURL: callbackURL || `${process.env.NEXT_PUBLIC_APP_URL}`,
   });
 };
