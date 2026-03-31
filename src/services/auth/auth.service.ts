@@ -15,8 +15,17 @@ export const authService = {
         cache: "no-store",
       });
 
+      if (!res.ok) {
+        return {
+          data: null,
+          error: {
+            message: `Failed to fetch session: ${res.status}`,
+          },
+        };
+      }
+
       const data = await res.json();
-      if (!data) {
+      if (!data || !data.user) {
         return {
           data: null,
           error: {

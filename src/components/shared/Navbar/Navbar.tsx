@@ -189,7 +189,9 @@ export function Navbar() {
                     href={
                       userRole === Role.ADMIN
                         ? "/admin/dashboard"
-                        : "/member/dashboard"
+                        : userRole === Role.MEMBER
+                          ? "/member/dashboard"
+                          : "/dashboard"
                     }
                     className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-900 hover:bg-gray-200 dark:hover:bg-zinc-800 transition-all duration-200 text-sm font-medium flex items-center gap-2 text-gray-700 dark:text-gray-300"
                   >
@@ -328,7 +330,9 @@ export function Navbar() {
                     href={
                       userRole === Role.ADMIN
                         ? "/admin/dashboard"
-                        : "/member/dashboard"
+                        : userRole === Role.MEMBER
+                          ? "/member/dashboard"
+                          : "/dashboard"
                     }
                     onClick={() => setIsOpen(false)}
                     className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all"

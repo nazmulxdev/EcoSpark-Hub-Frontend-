@@ -1,40 +1,41 @@
 export enum Role {
-  USER,
-  MEMBER,
-  ADMIN,
+  USER = "USER",
+  MEMBER = "MEMBER",
+  ADMIN = "ADMIN",
 }
 
 export enum IdeaStatus {
-  DRAFT,
-  UNDER_REVIEW,
-  APPROVED,
-  REJECTED,
+  DRAFT = "DRAFT",
+  UNDER_REVIEW = "UNDER_REVIEW",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
 
 export enum IdeaAccessType {
-  FREE,
-  MEMBER_ONLY,
-  PAID,
+  FREE = "FREE",
+  MEMBER_ONLY = "MEMBER_ONLY",
+  PAID = "PAID",
 }
 
 export enum VoteType {
-  UPVOTE,
-  DOWNVOTE,
+  UPVOTE = "UPVOTE",
+  DOWNVOTE = "DOWNVOTE",
 }
 
 export enum PaymentStatus {
-  PENDING,
-  PAID,
-  UNPAID,
+  PENDING = "PENDING",
+  PAID = "PAID",
+  UNPAID = "UNPAID",
 }
 
 export enum UserStatus {
-  BANNED,
-  ACTIVE,
+  BANNED = "BANNED",
+  ACTIVE = "ACTIVE",
 }
 
 export enum MemberStatus {
-  PENDING,
-  APPROVED,
-  REJECTED,
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
+
