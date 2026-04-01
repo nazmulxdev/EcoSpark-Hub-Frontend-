@@ -485,4 +485,40 @@ export const adminService = {
       };
     }
   },
+
+  // anaysis
+
+  getAnalysis: async function () {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/payments/analysis`, {
+        method: "GET",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+        next: {
+          tags: ["admin-dashboard"],
+        },
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      console.log(data);
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
 };

@@ -98,6 +98,12 @@ export const getDashboardStats = async () => {
   return result;
 };
 
+// analysis
+export const getAnalysis = async () => {
+  const result = await adminService.getAnalysis();
+  return result;
+};
+
 // Users
 export const getAllUsers = async (
   page?: number,

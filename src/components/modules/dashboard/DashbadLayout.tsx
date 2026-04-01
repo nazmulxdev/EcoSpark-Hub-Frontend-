@@ -15,8 +15,6 @@ import {
   BookOpen,
   Settings,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
   TrendingUp,
   FileText,
   Star,
@@ -79,7 +77,11 @@ export function DashboardClientLayout({
         { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
         { name: "Users", href: "/admin/dashboard/users", icon: Users },
         { name: "Members", href: "/admin/dashboard/members", icon: UserCheck },
-        { name: "Ideas", href: "/admin/dashboard/ideas", icon: Lightbulb },
+        {
+          name: "Manage Ideas",
+          href: "/admin/dashboard/ideas",
+          icon: Lightbulb,
+        },
         { name: "Categories", href: "/admin/dashboard/categories", icon: Tag },
         { name: "Blog", href: "/admin/dashboard/blog", icon: BookOpen },
         {
@@ -87,7 +89,6 @@ export function DashboardClientLayout({
           href: "/admin/dashboard/analytics",
           icon: TrendingUp,
         },
-        { name: "Settings", href: "/admin/dashboard/settings", icon: Settings },
       ];
     }
 
