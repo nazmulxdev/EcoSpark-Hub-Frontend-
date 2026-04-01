@@ -1,7 +1,11 @@
 "use server";
 
 import { adminService } from "@/services/admin/admin.service";
-import { ICreateCategory, IUpdateCategory } from "@/types/interrfaces";
+import {
+  IChangeIdeaStatus,
+  ICreateCategory,
+  IUpdateCategory,
+} from "@/types/interrfaces";
 import { revalidateTag } from "next/cache";
 
 export const createCategory = async (payload: ICreateCategory) => {
@@ -45,5 +49,45 @@ export const getAllCatgory = async (
   console.log(params.toString());
 
   const result = await adminService.getAllCatgory(params.toString());
+  return result;
+};
+
+export const getAllIdea = async (
+  page?: number,
+  limit?: number,
+  searchTerm?: string,
+  status?: string,
+  accessType?: string,
+  categoryId?: string,
+) => {
+  const params = new URLSearchParams();
+
+  if (page) params.append("page", page.toString());
+  if (limit) params.append("limit", limit.toString());
+  if (searchTerm && searchTerm.trim())
+    params.append("searchTerm", searchTerm.trim());
+  if (status && status.trim()) params.append("status", status.trim());
+  if (accessType && accessType.trim())
+    params.append("accessType", accessType.trim());
+  if (categoryId && categoryId.trim())
+    params.append("categoryId", categoryId.trim());
+
+  console.log("API Params:", params.toString());
+
+  const result = await adminService.getAllIdea(params.toString());
+  return result;
+};
+
+export const ideaApproveOrRejectWithFeedback = async (
+  slug: string,
+  payload: IChangeIdeaStatus,
+) => {
+  const result = await adminService.ideaApproveOrRejectWithFeedback(
+    slug,
+    payload,
+  );
+  if (result.data) {
+    revalidateTag("ideas", "max");
+  }
   return result;
 };
