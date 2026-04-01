@@ -1,4 +1,3 @@
-import { IdeaStatus } from "@/types/enums";
 import {
   IChangeIdeaStatus,
   ICreateCategory,
@@ -278,19 +277,22 @@ export const adminService = {
   },
 
   // Users
-  getAllUsers: async function () {
+  getAllUsers: async function (queryParams?: string) {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/admin/users`, {
-        method: "GET",
-        headers: {
-          Cookie: cookieStore.toString(),
+      const res = await fetch(
+        `${env.API_URL}/admin/users${queryParams ? `?${queryParams}` : ""}`,
+        {
+          method: "GET",
+          headers: {
+            Cookie: cookieStore.toString(),
+          },
+          cache: "no-store",
+          next: {
+            tags: ["admin-users"],
+          },
         },
-        cache: "no-store",
-        next: {
-          tags: ["admin-users"],
-        },
-      });
+      );
       const data = await res.json();
 
       if (!data.success) {
@@ -345,19 +347,22 @@ export const adminService = {
   },
 
   // Members
-  getAllMembers: async function () {
+  getAllMembers: async function (queryParams?: string) {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${env.API_URL}/admin/members`, {
-        method: "GET",
-        headers: {
-          Cookie: cookieStore.toString(),
+      const res = await fetch(
+        `${env.API_URL}/admin/members${queryParams ? `?${queryParams}` : ""}`,
+        {
+          method: "GET",
+          headers: {
+            Cookie: cookieStore.toString(),
+          },
+          cache: "no-store",
+          next: {
+            tags: ["admin-members"],
+          },
         },
-        cache: "no-store",
-        next: {
-          tags: ["admin-members"],
-        },
-      });
+      );
       const data = await res.json();
 
       if (!data.success) {

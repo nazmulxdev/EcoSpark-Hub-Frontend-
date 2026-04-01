@@ -99,8 +99,25 @@ export const getDashboardStats = async () => {
 };
 
 // Users
-export const getAllUsers = async () => {
-  const result = await adminService.getAllUsers();
+export const getAllUsers = async (
+  page?: number,
+  limit?: number,
+  searchTerm?: string,
+  userStatus?: string,
+  role?: string,
+) => {
+  const params = new URLSearchParams();
+  if (page) params.append("page", page.toString());
+  if (limit) params.append("limit", limit.toString());
+  if (searchTerm && searchTerm.trim())
+    params.append("searchTerm", searchTerm.trim());
+  if (userStatus && userStatus.trim())
+    params.append("userStatus", userStatus.trim());
+  if (role && role.trim()) params.append("role", role.trim());
+
+  console.log("User API Params:", params.toString());
+
+  const result = await adminService.getAllUsers(params.toString());
   return result;
 };
 
@@ -116,8 +133,19 @@ export const changeUserStatus = async (
 };
 
 // Members
-export const getAllMembers = async () => {
-  const result = await adminService.getAllMembers();
+export const getAllMembers = async (
+  page?: number,
+  limit?: number,
+  searchTerm?: string,
+  status?: string,
+) => {
+  const params = new URLSearchParams();
+  if (page) params.append("page", page.toString());
+  if (limit) params.append("limit", limit.toString());
+  if (searchTerm && searchTerm.trim())
+    params.append("searchTerm", searchTerm.trim());
+  if (status && status.trim()) params.append("status", status.trim());
+  const result = await adminService.getAllMembers(params.toString());
   return result;
 };
 
