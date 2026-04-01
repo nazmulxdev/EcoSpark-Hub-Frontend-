@@ -12,6 +12,8 @@ import {
   ArrowRight,
   Crown,
   TrendingUp,
+  Clock,
+  AlertCircle,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Role } from "@/types/enums";
@@ -25,6 +27,16 @@ interface UserDashboardData {
     role: Role;
     userStatus: string;
     createdAt: string;
+    membershipPayment: {
+      id: string;
+      status: string;
+      amount: string;
+    } | null;
+    member: {
+      id: string;
+      status: string;
+      joinedAt: string | null;
+    } | null;
   };
   stats: {
     totalVotes: number;
@@ -74,7 +86,20 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
   }
 
   const { profile, stats, recentActivity } = data;
+
+  // Determine membership status
   const isMember = profile?.role === Role.MEMBER;
+  const hasPendingPayment =
+    profile?.membershipPayment?.status === "PENDING" ||
+    profile?.membershipPayment?.status === "UNPAID";
+  const hasPaidButNotApproved =
+    profile?.membershipPayment?.status === "PAID" && !isMember;
+  const hasNoPayment = !profile?.membershipPayment;
+
+  // Member application status
+  const memberApplicationStatus = profile?.member?.status;
+  const isMemberPending = memberApplicationStatus === "PENDING";
+  const isMemberRejected = memberApplicationStatus === "REJECTED";
 
   const formatDate = (date: string) => {
     if (!date) return "Unknown";
@@ -139,6 +164,7 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {profile?.name || "Unknown"}
                 </h2>
+                {/* Role Badge */}
                 <span
                   className={`px-2 py-1 text-xs rounded-full ${
                     isMember
@@ -148,6 +174,7 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
                 >
                   {isMember ? "Member" : "User"}
                 </span>
+                {/* Status Badge */}
                 <span
                   className={`px-2 py-1 text-xs rounded-full ${
                     profile?.userStatus === "ACTIVE"
@@ -157,6 +184,17 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
                 >
                   {profile?.userStatus || "Unknown"}
                 </span>
+                {/* Payment Status Badge */}
+                {hasPendingPayment && (
+                  <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400">
+                    Payment Pending
+                  </span>
+                )}
+                {hasPaidButNotApproved && (
+                  <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400">
+                    Awaiting Approval
+                  </span>
+                )}
               </div>
               <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                 <div className="flex items-center gap-1">
@@ -169,7 +207,24 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
                 </div>
               </div>
             </div>
-            {!isMember && (
+
+            {/* Action Button based on membership status */}
+            {!isMember && hasPendingPayment && (
+              <Link
+                href="/dashboard/become-member"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-600 to-amber-600 text-white rounded-xl hover:from-yellow-700 hover:to-amber-700 transition-all shadow-md whitespace-nowrap"
+              >
+                <Clock className="w-4 h-4" />
+                Complete Payment
+              </Link>
+            )}
+            {!isMember && hasPaidButNotApproved && (
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 rounded-xl whitespace-nowrap">
+                <Clock className="w-4 h-4" />
+                Pending Approval
+              </div>
+            )}
+            {!isMember && hasNoPayment && (
               <Link
                 href="/dashboard/become-member"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-md whitespace-nowrap"
@@ -180,6 +235,49 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
             )}
           </div>
         </div>
+
+        {/* Pending Approval Info Banner */}
+        {hasPaidButNotApproved && (
+          <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 mb-8 border border-blue-200 dark:border-blue-800">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-500 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-blue-800 dark:text-blue-400">
+                  Membership Pending Approval
+                </h3>
+                <p className="text-sm text-blue-700 dark:text-blue-500">
+                  Your payment has been received! Our admin team will review
+                  your membership application and activate it soon. You&apos;ll
+                  receive a notification once approved.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pending Payment Info Banner */}
+        {hasPendingPayment && (
+          <div className="bg-yellow-50 dark:bg-yellow-950/30 rounded-xl p-4 mb-8 border border-yellow-200 dark:border-yellow-800">
+            <div className="flex items-start gap-3">
+              <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-500 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-yellow-800 dark:text-yellow-400">
+                  Complete Your Payment
+                </h3>
+                <p className="text-sm text-yellow-700 dark:text-yellow-500">
+                  You have a pending membership payment. Please complete the
+                  payment to activate your membership.
+                </p>
+                <Link
+                  href="/dashboard/become-member"
+                  className="inline-block mt-2 text-sm font-medium text-yellow-700 dark:text-yellow-500 hover:underline"
+                >
+                  Complete Payment →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -206,8 +304,8 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
           })}
         </div>
 
-        {/* Become Member CTA (for non-members) */}
-        {!isMember && (
+        {/* Become Member CTA (for non-members with no payment) */}
+        {!isMember && hasNoPayment && (
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-2xl p-6 mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -224,6 +322,29 @@ export function UserDashboardClient({ data }: UserDashboardClientProps) {
                 className="px-6 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all text-center whitespace-nowrap"
               >
                 Become a Member →
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Member Benefits Card (for members) */}
+        {isMember && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-2xl p-6 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  🎉 You&apos;re a Member!
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                  Enjoy premium features, post your ideas, and connect with the
+                  community!
+                </p>
+              </div>
+              <Link
+                href="/member/dashboard"
+                className="px-6 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all text-center whitespace-nowrap"
+              >
+                Go to Member Dashboard →
               </Link>
             </div>
           </div>

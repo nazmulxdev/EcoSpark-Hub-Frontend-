@@ -7,12 +7,14 @@ export const env = createEnv({
     APP_URL: z.url(),
     AUTH_URL: z.url(),
     API_URL: z.url(),
+    MEMBERSHIP_PRICE: z.string(),
   },
   client: {
     NEXT_PUBLIC_BACKEND_URL: z.url(),
     NEXT_PUBLIC_APP_URL: z.url(),
     NEXT_PUBLIC_AUTH_URL: z.url(),
     NEXT_PUBLIC_API_URL: z.url(),
+    NEXT_PUBLIC_MEMBERSHIP_PRICE: z.string(),
   },
   runtimeEnv: {
     APP_URL: process.env.APP_URL,
@@ -23,5 +25,7 @@ export const env = createEnv({
     NEXT_PUBLIC_AUTH_URL: process.env.NEXT_PUBLIC_AUTH_URL,
     API_URL: process.env.API_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    MEMBERSHIP_PRICE: process.env.MEMBERSHIP_PRICE,
+    NEXT_PUBLIC_MEMBERSHIP_PRICE: process.env.NEXT_PUBLIC_MEMBERSHIP_PRICE,
   },
 });
