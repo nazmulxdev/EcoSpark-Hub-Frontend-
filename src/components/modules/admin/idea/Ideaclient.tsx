@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useTransition } from "react";
@@ -41,51 +40,7 @@ import { IdeaStatus, IdeaAccessType } from "@/types/enums";
 import { ApproveRejectModal } from "./ApproveRejectModal";
 import { formatDistanceToNow } from "date-fns";
 
-// Updated Idea interface to match your API response
-interface Idea {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  problemStatement: string;
-  proposedSolution: string;
-  status: IdeaStatus;
-  accessType: IdeaAccessType;
-  price?: string | number | null;
-  rejectionFeedback?: string | null;
-  publishedAt?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  authorId: string;
-  categoryId: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    image: string | null;
-    createdAt: string;
-    updatedAt: string;
-    role: string;
-    userStatus: string;
-  };
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
-  comments: any[];
-  votes: any[];
-  purchases: any[];
-  images?: string[];
-  _count?: {
-    votes: number;
-    comments: number;
-  };
-}
+import { Idea } from "@/types/idea";
 
 interface Meta {
   page: number;
@@ -243,7 +198,7 @@ export function IdeasClient({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-full mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -641,6 +596,7 @@ export function IdeasClient({
 
       {/* Approve/Reject Modal */}
       <ApproveRejectModal
+        key={selectedIdea?.id || "new"}
         isOpen={modalOpen}
         onClose={() => {
           setModalOpen(false);

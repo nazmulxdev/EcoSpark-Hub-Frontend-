@@ -242,4 +242,242 @@ export const adminService = {
       };
     }
   },
+
+  // dashboard stats
+
+  getDashboardStats: async function () {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/dashboard`, {
+        method: "GET",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+        next: {
+          tags: ["admin-dashboard"],
+        },
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  // Users
+  getAllUsers: async function () {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/users`, {
+        method: "GET",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+        next: {
+          tags: ["admin-users"],
+        },
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  changeUserStatus: async function (
+    userId: string,
+    payload: { userStatus: string },
+  ) {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/users/${userId}/status`, {
+        method: "PATCH",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  // Members
+  getAllMembers: async function () {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/members`, {
+        method: "GET",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+        next: {
+          tags: ["admin-members"],
+        },
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  changeMemberStatus: async function (
+    memberId: string,
+    payload: { status: string },
+  ) {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(
+        `${env.API_URL}/admin/members/${memberId}/status`,
+        {
+          method: "PATCH",
+          headers: {
+            Cookie: cookieStore.toString(),
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+          body: JSON.stringify(payload),
+        },
+      );
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  // Ideas
+  getAllIdeasForAdmin: async function () {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/ideas`, {
+        method: "GET",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+        next: {
+          tags: ["admin-ideas"],
+        },
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
+
+  changeIdeaStatus: async function (
+    slug: string,
+    payload: { status: string; rejectionFeedback?: string },
+  ) {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${env.API_URL}/admin/ideas/${slug}/status`, {
+        method: "PATCH",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          data: null,
+          error: data.error,
+        };
+      }
+
+      return { data: data.data, error: null };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: error,
+      };
+    }
+  },
 };

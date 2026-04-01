@@ -62,12 +62,14 @@ export default async function AdminIdeasPage({ searchParams }: PageProps) {
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             {result.error.message || "Something went wrong"}
           </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Try Again
-          </button>
+          <div className="flex justify-center gap-4">
+            <a
+              href="/admin/dashboard/ideas"
+              className="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Try Again
+            </a>
+          </div>
         </div>
       </div>
     );

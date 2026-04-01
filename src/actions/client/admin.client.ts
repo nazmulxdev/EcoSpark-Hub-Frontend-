@@ -91,3 +91,60 @@ export const ideaApproveOrRejectWithFeedback = async (
   }
   return result;
 };
+
+// Dashboard
+export const getDashboardStats = async () => {
+  const result = await adminService.getDashboardStats();
+  return result;
+};
+
+// Users
+export const getAllUsers = async () => {
+  const result = await adminService.getAllUsers();
+  return result;
+};
+
+export const changeUserStatus = async (
+  userId: string,
+  payload: { userStatus: string },
+) => {
+  const result = await adminService.changeUserStatus(userId, payload);
+  if (result.data) {
+    revalidateTag("admin-users", "max");
+  }
+  return result;
+};
+
+// Members
+export const getAllMembers = async () => {
+  const result = await adminService.getAllMembers();
+  return result;
+};
+
+export const changeMemberStatus = async (
+  memberId: string,
+  payload: { status: string },
+) => {
+  const result = await adminService.changeMemberStatus(memberId, payload);
+  if (result.data) {
+    revalidateTag("admin-members", "max");
+  }
+  return result;
+};
+
+// Ideas
+export const getAllIdeasForAdmin = async () => {
+  const result = await adminService.getAllIdeasForAdmin();
+  return result;
+};
+
+export const changeIdeaStatus = async (
+  slug: string,
+  payload: { status: string; rejectionFeedback?: string },
+) => {
+  const result = await adminService.changeIdeaStatus(slug, payload);
+  if (result.data) {
+    revalidateTag("admin-ideas", "max");
+  }
+  return result;
+};
