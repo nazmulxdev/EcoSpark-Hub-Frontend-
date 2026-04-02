@@ -371,10 +371,9 @@ export function MyIdeasClient({
                         <Eye className="w-4 h-4 text-gray-500" />
                       </Link>
 
-                      {(idea.status === IdeaStatus.DRAFT ||
-                        idea.status === IdeaStatus.REJECTED) && (
+                      {idea.status === IdeaStatus.DRAFT && (
                         <Link
-                          href={`/member/dashboard/ideas/edit/${idea.slug}`}
+                          href={`/member/dashboard/edit/${idea.slug}`}
                           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
                         >
                           <Edit className="w-4 h-4 text-gray-500" />
@@ -395,8 +394,7 @@ export function MyIdeasClient({
                         </button>
                       )}
 
-                      {(idea.status === IdeaStatus.DRAFT ||
-                        idea.status === IdeaStatus.REJECTED) && (
+                      {idea.status === IdeaStatus.DRAFT && (
                         <Button
                           onClick={() =>
                             openDeleteDialog(idea.slug, idea.title)
