@@ -35,7 +35,6 @@ import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { IdeaAccessType } from "@/types/enums";
 
-
 interface Idea {
   id: string;
   title: string;
@@ -143,31 +142,48 @@ export function PublicIdeasClient({
     const urlParams = new URLSearchParams();
 
     // Preserve existing categoryId if it's not being explicitly changed
-    const categoryId = params.categoryId !== undefined ? String(params.categoryId) : currentCategoryId;
+    const categoryId =
+      params.categoryId !== undefined
+        ? String(params.categoryId)
+        : currentCategoryId;
     if (categoryId && categoryId !== "")
       urlParams.set("categoryId", categoryId);
 
     if (params.searchTerm !== undefined ? params.searchTerm : currentSearchTerm)
-      urlParams.set("searchTerm", String(params.searchTerm !== undefined ? params.searchTerm : currentSearchTerm));
-    
+      urlParams.set(
+        "searchTerm",
+        String(
+          params.searchTerm !== undefined
+            ? params.searchTerm
+            : currentSearchTerm,
+        ),
+      );
+
     // Explicitly handle empty string to remove from URL
     if (params.searchTerm === "") urlParams.delete("searchTerm");
 
-    const accessType = params.accessType !== undefined ? String(params.accessType) : currentAccessType;
+    const accessType =
+      params.accessType !== undefined
+        ? String(params.accessType)
+        : currentAccessType;
     if (accessType && accessType !== "")
       urlParams.set("accessType", accessType);
 
-    const sortByParam = params.sortBy !== undefined ? String(params.sortBy) : currentSortBy;
+    const sortByParam =
+      params.sortBy !== undefined ? String(params.sortBy) : currentSortBy;
     if (sortByParam && sortByParam !== "createdAt")
       urlParams.set("sortBy", sortByParam);
 
-    const sortOrderParam = params.sortOrder !== undefined ? String(params.sortOrder) : currentSortOrder;
+    const sortOrderParam =
+      params.sortOrder !== undefined
+        ? String(params.sortOrder)
+        : currentSortOrder;
     if (sortOrderParam && sortOrderParam !== "desc")
       urlParams.set("sortOrder", sortOrderParam);
 
-    const pageParam = params.page !== undefined ? Number(params.page) : currentPage;
-    if (pageParam > 1)
-      urlParams.set("page", String(pageParam));
+    const pageParam =
+      params.page !== undefined ? Number(params.page) : currentPage;
+    if (pageParam > 1) urlParams.set("page", String(pageParam));
 
     const newUrl = `${pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ""}`;
     startTransition(() => router.push(newUrl, { scroll: false }));
@@ -302,11 +318,12 @@ export function PublicIdeasClient({
     }
   };
 
-  const hasFilters = currentSearchTerm || currentAccessType || currentCategoryId;
-  
+  const hasFilters =
+    currentSearchTerm || currentAccessType || currentCategoryId;
+
   // Try to find the category name from the ideas if currentCategoryId is set
-  const activeCategoryName = currentCategoryId 
-    ? ideas.find(i => i.category.id === currentCategoryId)?.category.name 
+  const activeCategoryName = currentCategoryId
+    ? ideas.find((i) => i.category.id === currentCategoryId)?.category.name
     : null;
   const sortOptions = [
     { value: "newest", label: "Newest First" },
@@ -532,6 +549,9 @@ export function PublicIdeasClient({
               const voteCount = idea._count?.votes || 0;
               const commentCount = idea._count?.comments || 0;
               const imageUrl = idea.images?.[0];
+
+              console.log(voteCount);
+              console.log(commentCount);
 
               return (
                 <motion.div

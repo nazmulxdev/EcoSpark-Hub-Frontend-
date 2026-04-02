@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
-import { IdeaAccessType } from "@/types/enums";
+import { IdeaAccessType, VoteType } from "@/types/enums";
 import { PurchaseModal } from "./PurchaseModal";
 import { ResumePaymentModal } from "./ResumePaymentModal";
 import {
@@ -34,6 +34,8 @@ import {
   checkInWatchlist,
   removeFromWatchlist,
 } from "@/actions/client/watchlist.client";
+import { CommentsSection } from "@/components/comment/CommentsSection";
+import { VoteButton } from "@/components/vote/VoteButton";
 
 interface Idea {
   id: string;
@@ -61,6 +63,7 @@ interface Idea {
     votes: number;
     comments: number;
   };
+  userVote?: VoteType | null;
   hasAccess?: boolean;
   requiresAccess?: boolean;
   contentLocked?: boolean;
@@ -83,7 +86,6 @@ interface IdeaDetailClientProps {
 
 export function IdeaDetailClient({
   idea,
-  userId,
   userRole,
   isAuthenticated,
   hasAccess,
@@ -267,6 +269,11 @@ export function IdeaDetailClient({
 
             {/* Stats Bar */}
             <div className="flex flex-wrap gap-6 justify-between items-center mb-8 pb-6 border-b border-gray-100 dark:border-zinc-800">
+              <VoteButton
+                ideaId={idea.id}
+                initialVotes={voteCount}
+                initialUserVote={idea.userVote || null}
+              />
               <div className="flex gap-6">
                 <div className="flex items-center gap-2">
                   <ThumbsUp className="w-5 h-5 text-gray-500" />
@@ -447,26 +454,8 @@ export function IdeaDetailClient({
           </div>
         </div>
 
-        {/* Comments Section */}
-        <div className="mt-8 bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-green-500" />
-            Discussion ({commentCount})
-          </h2>
-          {!isAuthenticated ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500 dark:text-gray-400 mb-4">
-                Login to join the discussion
-              </p>
-              <Link href={`/login?redirect=/ideas/${idea.slug}`}>
-                <Button variant="outline">Login to Comment</Button>
-              </Link>
-            </div>
-          ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-8">
-              Comments section coming soon...
-            </p>
-          )}
+        <div className="mt-4">
+          <CommentsSection ideaId={idea.id} initialCount={commentCount} />
         </div>
       </div>
 

@@ -81,7 +81,7 @@ export function Navbar() {
     { href: "/", label: "Home" },
     { href: "/ideas", label: "Ideas" },
     { href: "/about", label: "About Us" },
-    { href: "/blog", label: "Blog" },
+    { href: "/blogs", label: "Blogs" },
   ];
 
   const isActive = (path: string) => pathname === path;

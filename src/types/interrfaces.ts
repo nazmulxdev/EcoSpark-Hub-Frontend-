@@ -96,3 +96,14 @@ export interface IUpdateVote {
 export interface ICreateWatchlist {
   ideaId: string;
 }
+
+export interface IQueryParams {
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  fields?: string;
+  include?: string;
+  [key: string]: string | undefined;
+}
