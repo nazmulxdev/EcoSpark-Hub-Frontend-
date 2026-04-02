@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -31,6 +31,7 @@ import { PurchaseModal } from "./PurchaseModal";
 import { ResumePaymentModal } from "./ResumePaymentModal";
 import {
   addToWatchlist,
+  checkInWatchlist,
   removeFromWatchlist,
 } from "@/actions/client/watchlist.client";
 
@@ -95,6 +96,19 @@ export function IdeaDetailClient({
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [isResumePaymentModalOpen, setIsResumePaymentModalOpen] =
     useState(false);
+
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (isAuthenticated && idea.id) {
+        const result = await checkInWatchlist(idea.id);
+        if (result.data !== undefined && result.data !== null) {
+          setIsInWatchlist(result.data);
+        }
+      }
+    };
+
+    checkWatchlistStatus();
+  }, [isAuthenticated, idea.id]);
 
   const isMember = userRole === "MEMBER";
   const isLocked = !hasAccess && requiresAccess;

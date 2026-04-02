@@ -91,3 +91,27 @@ export const removeFromWatchlist = async (ideaId: string) => {
     return { data: null, error };
   }
 };
+
+export const checkInWatchlist = async (ideaId: string) => {
+  try {
+    const cookieStore = await cookies();
+    const res = await fetch(`${env.API_URL}/watchlist/check/${ideaId}`, {
+      method: "GET",
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      return { data: false, error: data.error };
+    }
+
+    return { data: data.data?.exists || false, error: null };
+  } catch (error) {
+    console.error(error);
+    return { data: false, error };
+  }
+};

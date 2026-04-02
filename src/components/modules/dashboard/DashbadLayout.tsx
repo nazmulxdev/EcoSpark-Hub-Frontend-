@@ -104,14 +104,9 @@ export function DashboardClientLayout({
         { name: "Drafts", href: "/member/dashboard/drafts", icon: Eye },
         { name: "Watchlist", href: "/member/dashboard/watchlist", icon: Star },
         {
-          name: "Analytics",
-          href: "/member/dashboard/analytics",
+          name: "Purchased Ideas",
+          href: "/member/dashboard/purchased",
           icon: TrendingUp,
-        },
-        {
-          name: "Settings",
-          href: "/member/dashboard/settings",
-          icon: Settings,
         },
       ];
     }
