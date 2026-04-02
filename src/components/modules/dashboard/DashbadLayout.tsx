@@ -22,6 +22,7 @@ import {
   Tag,
   Bell,
   Leaf,
+  DollarSign,
 } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
@@ -120,8 +121,11 @@ export function DashboardClientLayout({
         icon: UserPlus,
       },
       { name: "Watchlist", href: "/dashboard/watchlist", icon: Star },
-      { name: "My Activity", href: "/dashboard/activity", icon: TrendingUp },
-      { name: "Settings", href: "/dashboard/settings", icon: Settings },
+      {
+        name: "Purchased Ideas",
+        href: "/dashboard/purchased",
+        icon: Lightbulb,
+      },
     ];
   };
 
