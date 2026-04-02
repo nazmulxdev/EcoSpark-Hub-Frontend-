@@ -168,7 +168,7 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
       toast.success("Idea created! You can now submit it for review.", {
         id: toastId,
       });
-      router.push("/member/dashboard/ideas");
+      router.push("/member/dashboard/drafts");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong", { id: toastId });

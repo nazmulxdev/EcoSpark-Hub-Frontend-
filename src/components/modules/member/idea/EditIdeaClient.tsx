@@ -194,7 +194,7 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
       toast.success("Idea updated successfully!", {
         id: toastId,
       });
-      router.push("/member/dashboard/ideas");
+      router.push("/member/dashboard/drafts");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong", { id: toastId });

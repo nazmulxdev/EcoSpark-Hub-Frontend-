@@ -194,7 +194,7 @@ export function DraftIdeasClient({
             </p>
           </div>
           <Link
-            href="/member/dashboard/ideas/create"
+            href="/member/dashboard/create"
             className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-sm"
           >
             <Plus className="w-4 h-4" />
@@ -254,7 +254,7 @@ export function DraftIdeasClient({
               Create a new idea and save it as draft to continue later
             </p>
             <Link
-              href="/member/dashboard/ideas/create"
+              href="/member/dashboard/create"
               className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
