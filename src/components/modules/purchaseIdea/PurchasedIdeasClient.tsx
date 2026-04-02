@@ -248,7 +248,7 @@ export function PurchasedIdeasClient({
                 Total Spent
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                ${purchases.reduce((sum, p) => sum + p.amount, 0)}
+                ${purchases.reduce((sum, p) => sum + Number(p.amount), 0)}
               </p>
             </div>
           </div>

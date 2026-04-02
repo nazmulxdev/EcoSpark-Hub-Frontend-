@@ -1,7 +1,7 @@
 // app/(dashboard)/member/dashboard/purchased/page.tsx
 
 import { getMyPurchasedIdeas } from "@/actions/client/idea.client";
-import { PurchasedIdeasClient } from "./PurchasedIdeasClient";
+import { PurchasedIdeasClient } from "@/components/modules/purchaseIdea/PurchasedIdeasClient";
 
 export const metadata = {
   title: "My Purchased Ideas | EcoSpark Hub",
