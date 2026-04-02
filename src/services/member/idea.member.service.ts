@@ -132,6 +132,7 @@ export const ideaMemberService = {
         };
       }
 
+      console.log(data);
       return { data: data.data, error: null };
     } catch (error) {
       console.error(error);
