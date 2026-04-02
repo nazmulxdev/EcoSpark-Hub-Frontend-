@@ -217,7 +217,7 @@ export function MembersClient({
     (m) => m.status === MemberStatus.REJECTED,
   ).length;
   const totalRevenue = members.reduce(
-    (sum, m) => sum + (m.membershipPayment?.amount || 0),
+    (sum, m) => sum + (Number(m.membershipPayment?.amount) || 0),
     0,
   );
 

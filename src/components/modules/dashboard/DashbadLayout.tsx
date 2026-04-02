@@ -98,7 +98,7 @@ export function DashboardClientLayout({
         { name: "My Ideas", href: "/member/dashboard/ideas", icon: Lightbulb },
         {
           name: "Create Idea",
-          href: "/member/dashboard/ideas/create",
+          href: "/member/dashboard/create",
           icon: FileText,
         },
         { name: "Drafts", href: "/member/dashboard/drafts", icon: Eye },

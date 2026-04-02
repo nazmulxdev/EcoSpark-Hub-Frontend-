@@ -1,24 +1,13 @@
-import { getMyIdeas } from "@/actions/client/idea.client";
-import { MyIdeasClient } from "@/components/modules/member/idea/MyIdeasClient";
+import { getAllCatgory } from "@/actions/client/admin.client";
+import { CreateIdeaClient } from "@/components/modules/member/idea/CreateIdeaClient";
 
 export const metadata = {
-  title: "My Ideas | Member Dashboard",
-  description: "Manage your submitted ideas",
+  title: "Create New Idea | Member Dashboard",
+  description: "Share your sustainable idea with the community",
 };
 
-interface PageProps {
-  searchParams: Promise<{
-    page?: string;
-    limit?: string;
-  }>;
-}
-
-export default async function MyIdeasPage({ searchParams }: PageProps) {
-  const params = await searchParams;
-  const page = params.page ? parseInt(params.page) : 1;
-  const limit = params.limit ? parseInt(params.limit) : 10;
-
-  const result = await getMyIdeas(page, limit);
+export default async function CreateIdeaPage() {
+  const result = await getAllCatgory(1, 100); // Get all categories
 
   if (result.error) {
     return (
@@ -40,7 +29,7 @@ export default async function MyIdeasPage({ searchParams }: PageProps) {
             </svg>
           </div>
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Failed to Load Ideas
+            Failed to Load Categories
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             {result.error.message || "Something went wrong"}
@@ -56,22 +45,11 @@ export default async function MyIdeasPage({ searchParams }: PageProps) {
     );
   }
 
-  const ideas = result.data?.data || [];
-  const meta = result.data?.meta || {
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
-  };
+  const categories = result.data?.data || [];
 
   return (
     <div className="space-y-8">
-      <MyIdeasClient
-        initialIdeas={ideas}
-        initialMeta={meta}
-        currentPage={page}
-        currentLimit={limit}
-      />
+      <CreateIdeaClient categories={categories} />
     </div>
   );
 }
