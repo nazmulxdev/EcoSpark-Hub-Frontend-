@@ -1,5 +1,3 @@
-// app/(common)/about/page.tsx
-
 import { Metadata } from "next";
 import Link from "next/link";
 import {

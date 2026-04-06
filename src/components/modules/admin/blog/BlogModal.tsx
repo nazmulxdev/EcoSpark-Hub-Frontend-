@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { Blog } from "@/types/blog";
+import Image from "next/image";
 
 interface BlogModalProps {
   isOpen: boolean;
@@ -171,16 +172,19 @@ export function BlogModal({
 
                   {/* Image Preview */}
                   {coverImagePreview && (
-                    <div className="relative mb-3 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700">
-                      <img
+                    <div className="relative mb-3 rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700 aspect-video w-full">
+                      <Image
                         src={coverImagePreview}
                         alt="Cover preview"
-                        className="w-full h-48 object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, 800px"
+                        priority
                       />
                       <Button
                         type="button"
                         onClick={handleRemoveImage}
-                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors z-10"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

@@ -14,6 +14,7 @@ export const castVote = async (ideaId: string, type: VoteType) => {
         Cookie: cookieStore.toString(),
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ ideaId, type }),
       cache: "no-store",
     });
@@ -41,6 +42,7 @@ export const getVoteStatus = async (ideaId: string) => {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
       cache: "no-store",
       next: {
         tags: [`votes-${ideaId}`],

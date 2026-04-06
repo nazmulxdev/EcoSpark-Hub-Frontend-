@@ -20,6 +20,7 @@ export const adminService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -53,6 +54,7 @@ export const adminService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -85,6 +87,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
       });
       const data = await res.json();
 
@@ -116,6 +119,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["category"],
         },
@@ -147,6 +151,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["category"],
         },
@@ -185,6 +190,7 @@ export const adminService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -219,6 +225,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["ideas"],
         },
@@ -253,6 +260,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["admin-dashboard"],
         },
@@ -288,6 +296,7 @@ export const adminService = {
             Cookie: cookieStore.toString(),
           },
           cache: "no-store",
+          credentials: "include",
           next: {
             tags: ["admin-users"],
           },
@@ -325,6 +334,7 @@ export const adminService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -358,6 +368,7 @@ export const adminService = {
             Cookie: cookieStore.toString(),
           },
           cache: "no-store",
+          credentials: "include",
           next: {
             tags: ["admin-members"],
           },
@@ -397,6 +408,7 @@ export const adminService = {
             "Content-Type": "application/json",
           },
           cache: "no-store",
+          credentials: "include",
           body: JSON.stringify(payload),
         },
       );
@@ -429,6 +441,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["admin-ideas"],
         },
@@ -465,6 +478,7 @@ export const adminService = {
           "Content-Type": "application/json",
         },
         cache: "no-store",
+        credentials: "include",
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -497,6 +511,7 @@ export const adminService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["admin-dashboard"],
         },

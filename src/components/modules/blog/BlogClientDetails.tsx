@@ -1,4 +1,4 @@
-// components/modules/blog/BlogDetailClient.tsx (SIMPLIFIED)
+// components/modules/blog/BlogDetailClient.tsx (FIXED)
 
 "use client";
 
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
+import Image from "next/image";
 
 interface Blog {
   id: string;
@@ -67,6 +68,10 @@ export function BlogDetailClient({ blog }: BlogDetailClientProps) {
     return { __html: blog.content || "" };
   };
 
+  // Single line className to avoid hydration mismatch
+  const proseClasses =
+    "prose prose-lg prose-green dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4 prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:mt-5 prose-h3:mb-2 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4 prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:my-6 prose-ul:my-4 prose-ul:pl-6 prose-ol:my-4 prose-ol:pl-6 prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:my-1 prose-blockquote:border-l-4 prose-blockquote:border-green-500 prose-blockquote:pl-4 prose-blockquote:my-4 prose-blockquote:italic prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-xl prose-pre:overflow-x-auto";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
       {/* Back Button */}
@@ -83,11 +88,14 @@ export function BlogDetailClient({ blog }: BlogDetailClientProps) {
       {/* Hero Section */}
       <div className="relative">
         {coverImageUrl && (
-          <div className="h-64 md:h-96 overflow-hidden">
-            <img
+          <div className="relative h-64 md:h-96 w-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
+            <Image
               src={coverImageUrl}
               alt={blog.title}
-              className="w-full h-full object-cover"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px"
             />
           </div>
         )}
@@ -147,22 +155,9 @@ export function BlogDetailClient({ blog }: BlogDetailClientProps) {
                 </div>
               </div>
 
-              {/* Content */}
+              {/* Content - Fixed className with single line */}
               <div
-                className="prose prose-lg prose-green dark:prose-invert max-w-none
-                  prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-                  prose-h1:text-3xl prose-h1:mt-8 prose-h1:mb-4
-                  prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3
-                  prose-h3:text-xl prose-h3:mt-5 prose-h3:mb-2
-                  prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
-                  prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline
-                  prose-img:rounded-xl prose-img:my-6
-                  prose-ul:my-4 prose-ul:pl-6
-                  prose-ol:my-4 prose-ol:pl-6
-                  prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:my-1
-                  prose-blockquote:border-l-4 prose-blockquote:border-green-500 prose-blockquote:pl-4 prose-blockquote:my-4 prose-blockquote:italic prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
-                  prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-                  prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-xl prose-pre:overflow-x-auto"
+                className={proseClasses}
                 dangerouslySetInnerHTML={createMarkup()}
               />
 

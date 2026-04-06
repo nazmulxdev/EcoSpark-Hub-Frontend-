@@ -23,6 +23,7 @@ export const getWatchlist = async (
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
       cache: "no-store",
       next: {
         tags: ["watchlist"],
@@ -51,6 +52,7 @@ export const addToWatchlist = async (ideaId: string) => {
         Cookie: cookieStore.toString(),
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ ideaId }),
     });
 
@@ -76,6 +78,7 @@ export const removeFromWatchlist = async (ideaId: string) => {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -100,6 +103,7 @@ export const checkInWatchlist = async (ideaId: string) => {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
       cache: "no-store",
     });
 

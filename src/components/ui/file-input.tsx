@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
+import Image from "next/image";
 
 interface FileInputProps {
   onChange: (files: File[]) => void;
@@ -71,9 +72,11 @@ export function FileInput({
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {previews.map((preview, index) => (
           <div key={index} className="relative group">
-            <img
+            <Image
               src={preview}
               alt={`Preview ${index + 1}`}
+              fill
+              priority
               className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
             />
             <Button

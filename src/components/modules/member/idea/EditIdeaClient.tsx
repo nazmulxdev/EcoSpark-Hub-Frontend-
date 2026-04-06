@@ -32,6 +32,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { updateIdea } from "@/actions/client/idea.client";
 import { IdeaAccessType } from "@/types/enums";
 import * as z from "zod";
+import Image from "next/image";
 
 interface Category {
   id: string;
@@ -206,8 +207,8 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
-    if (images.length + files.length > 5) {
-      toast.error("You can upload maximum 5 images");
+    if (existingImages.length + images.length + files.length > 3) {
+      toast.error("You can upload maximum 3 images");
       return;
     }
 
@@ -219,8 +220,8 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
         toast.error(`"${file.name}" is not a valid image file`);
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(`"${file.name}" exceeds 5MB limit`);
+      if (file.size > 1.2 * 1024 * 1024) {
+        toast.error(`"${file.name}" exceeds 1.2 MB limit`);
         return;
       }
       validFiles.push(file);
@@ -272,21 +273,21 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-8"
+        className="text-center mb-6 sm:mb-8"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-4">
-          <Lightbulb className="w-8 h-8 text-white" />
+        <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-3 sm:mb-4">
+          <Lightbulb className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Edit Idea
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
           Update your sustainable solution
         </p>
       </motion.div>
@@ -294,7 +295,7 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
       {/* Back Link */}
       <Link
         href="/member/dashboard/ideas"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-6"
+        className="inline-flex items-center gap-2 text-sm sm:text-base text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-4 sm:mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to My Ideas
@@ -302,16 +303,16 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
 
       {/* Status Banner */}
       {idea.status === "REJECTED" && idea?.rejectionFeedback && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 rounded-xl border border-red-200 dark:border-red-800">
-          <div className="flex items-start gap-3">
-            <div className="p-1 bg-red-100 dark:bg-red-900/50 rounded-full">
+        <div className="mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-950/30 rounded-xl border border-red-200 dark:border-red-800">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <div className="p-1 bg-red-100 dark:bg-red-900/50 rounded-full shrink-0">
               <X className="w-4 h-4 text-red-600 dark:text-red-500" />
             </div>
             <div>
-              <h3 className="font-semibold text-red-800 dark:text-red-400">
+              <h3 className="font-semibold text-sm sm:text-base text-red-800 dark:text-red-400">
                 Rejection Feedback
               </h3>
-              <p className="text-sm text-red-700 dark:text-red-500 mt-1">
+              <p className="text-xs sm:text-sm text-red-700 dark:text-red-500 mt-1">
                 {idea?.rejectionFeedback}
               </p>
               <p className="text-xs text-red-600 dark:text-red-400 mt-2">
@@ -324,7 +325,7 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         <FieldGroup>
           {/* Title */}
           <Field>
@@ -339,11 +340,13 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                   setFormValues((prev) => ({ ...prev, title: e.target.value }))
                 }
                 placeholder="Give your idea a catchy title"
-                className="pl-10 h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
+                className="pl-10 h-10 sm:h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
               />
             </div>
             {errors.title && (
-              <p className="text-sm text-red-500 mt-1">{errors.title}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.title}
+              </p>
             )}
           </Field>
 
@@ -358,15 +361,15 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                 setFormValues((prev) => ({ ...prev, categoryId: val }))
               }
             >
-              <SelectTrigger className="h-12 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
+              <SelectTrigger className="h-10 sm:h-12 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm sm:text-base">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg max-h-[200px] sm:max-h-[300px]">
                 {categories.map((cat) => (
                   <SelectItem
                     key={cat.id}
                     value={cat.id}
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm sm:text-base"
                   >
                     {cat.name}
                   </SelectItem>
@@ -374,7 +377,9 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
               </SelectContent>
             </Select>
             {errors.categoryId && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryId}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.categoryId}
+              </p>
             )}
           </Field>
 
@@ -383,7 +388,7 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
             <FieldLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Access Type *
             </FieldLabel>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
               {[
                 IdeaAccessType.FREE,
                 IdeaAccessType.MEMBER_ONLY,
@@ -393,14 +398,14 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                   key={type}
                   type="button"
                   onClick={() => handleAccessTypeChange(type)}
-                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border transition-all ${
+                  className={`flex items-center justify-center gap-2 p-2 sm:p-3 rounded-xl border transition-all text-sm sm:text-base ${
                     formValues.accessType === type
                       ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400 shadow-sm"
                       : "border-gray-200 dark:border-zinc-700 hover:border-green-500 hover:bg-gray-50 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {getAccessTypeIcon(type)}
-                  <span className="text-sm font-medium capitalize">
+                  <span className="font-medium capitalize">
                     {type.replace("_", " ")}
                   </span>
                 </button>
@@ -428,11 +433,13 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                     }))
                   }
                   placeholder="Enter price"
-                  className="pl-10 h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
+                  className="pl-10 h-10 sm:h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                 />
               </div>
               {errors.price && (
-                <p className="text-sm text-red-500 mt-1">{errors.price}</p>
+                <p className="text-xs sm:text-sm text-red-500 mt-1">
+                  {errors.price}
+                </p>
               )}
             </Field>
           )}
@@ -452,10 +459,10 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                 }))
               }
               placeholder="What problem does your idea solve?"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.problemStatement && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
                 {errors.problemStatement}
               </p>
             )}
@@ -479,10 +486,10 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                 }))
               }
               placeholder="How does your idea solve the problem?"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.proposedSolution && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
                 {errors.proposedSolution}
               </p>
             )}
@@ -506,10 +513,12 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                 }))
               }
               placeholder="Provide a detailed explanation of your idea..."
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.description && (
-              <p className="text-sm text-red-500 mt-1">{errors.description}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.description}
+              </p>
             )}
             <p className="text-xs text-gray-500 mt-1">
               {formValues.description.length}/5000 characters (minimum 50)
@@ -522,21 +531,27 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
               <FieldLabel className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
                 Current Images
               </FieldLabel>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3  gap-3 sm:gap-4">
                 {existingImages.map((img, index) => (
-                  <div key={index} className="relative group">
-                    <img
+                  <div
+                    key={index}
+                    className="relative w-full aspect-square group"
+                  >
+                    <Image
                       src={img}
                       alt={`Current image ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      fill
+                      className="object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 150px"
                     />
-                    <Button
+                    <button
                       type="button"
                       onClick={() => removeExistingImage(img)}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
+                      aria-label="Remove image"
                     >
                       <Trash2 className="w-3 h-3" />
-                    </Button>
+                    </button>
                   </div>
                 ))}
               </div>
@@ -550,30 +565,36 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
           {/* New Images Upload */}
           <div>
             <FieldLabel className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-              Add New Images (Optional, max 5 total)
+              Add New Images (Optional, max 3 total)
             </FieldLabel>
-            <div className="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-6 bg-gray-50 dark:bg-zinc-800/50">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+            <div className="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-4 sm:p-6 bg-gray-50 dark:bg-zinc-800/50">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 mb-4">
                 {imagePreviews.map((preview, index) => (
-                  <div key={index} className="relative group">
-                    <img
+                  <div
+                    key={index}
+                    className="relative w-full aspect-square group"
+                  >
+                    <Image
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      fill
+                      className="object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 150px"
                     />
-                    <Button
+                    <button
                       type="button"
                       onClick={() => removeNewImage(index)}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
+                      aria-label="Remove image"
                     >
                       <X className="w-3 h-3" />
-                    </Button>
+                    </button>
                   </div>
                 ))}
-                {existingImages.length + images.length < 5 && (
-                  <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg cursor-pointer hover:border-green-500 transition-colors bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800">
-                    <Upload className="w-6 h-6 text-gray-400" />
-                    <span className="text-xs text-gray-500 mt-1">
+                {existingImages.length + images.length < 3 && (
+                  <label className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg cursor-pointer hover:border-green-500 transition-colors bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800">
+                    <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
+                    <span className="text-xs text-gray-500 mt-1 text-center px-1">
                       Add Image
                     </span>
                     <input
@@ -588,22 +609,23 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
                 )}
               </div>
               <p className="text-xs text-gray-500 text-center">
-                Upload up to {5 - (existingImages.length + images.length)} more
-                images. JPG, PNG, GIF. Max 5MB each.
+                {existingImages.length + images.length >= 3
+                  ? "Maximum 3 images reached."
+                  : `Upload up to ${3 - (existingImages.length + images.length)} more images. JPG, PNG, GIF. Max 1.2MB each. (${existingImages.length + images.length}/3)`}
               </p>
             </div>
           </div>
         </FieldGroup>
 
         {/* Info Box */}
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
-          <div className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-500 mt-0.5 shrink-0" />
+        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-3 sm:p-4 border border-blue-200 dark:border-blue-800">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-500 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-blue-800 dark:text-blue-400">
+              <h3 className="font-semibold text-sm sm:text-base text-blue-800 dark:text-blue-400">
                 What happens next?
               </h3>
-              <p className="text-sm text-blue-700 dark:text-blue-500 mt-1">
+              <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-500 mt-1">
                 After updating your idea, you can submit it for review again.
                 Admin will review your updated idea and either approve it or
                 provide feedback.
@@ -616,16 +638,16 @@ export function EditIdeaClient({ idea, categories }: EditIdeaClientProps) {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 text-base font-medium bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-10 sm:h-12 text-sm sm:text-base font-medium bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
               Saving Changes...
             </>
           ) : (
             <>
-              <Save className="w-5 h-5 mr-2" />
+              <Save className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Save Changes
             </>
           )}

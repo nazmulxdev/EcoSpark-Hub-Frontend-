@@ -13,6 +13,7 @@ export const authService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -52,6 +53,7 @@ export const authService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
       });
 
       if (!res.ok) {

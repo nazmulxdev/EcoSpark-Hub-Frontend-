@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
+import Image from "next/image";
 
 interface Blog {
   id: string;
@@ -64,7 +65,6 @@ interface BlogClientProps {
 export function BlogClient({
   initialBlogs,
   initialMeta,
-  currentPage,
   currentSearchTerm,
 }: BlogClientProps) {
   const router = useRouter();
@@ -284,9 +284,11 @@ export function BlogClient({
                   aria-label={`Read article: ${blog.title}`}
                 >
                   {coverImageUrl ? (
-                    <img
+                    <Image
                       src={coverImageUrl}
                       alt={blog.title}
+                      fill
+                      priority
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -312,7 +314,7 @@ export function BlogClient({
                     </div>
                   </div>
 
-                  <Link href={`/blog/${blog.slug}`}>
+                  <Link href={`/blogs/${blog.slug}`}>
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-green-600 transition-colors line-clamp-2">
                       {blog.title}
                     </h3>
@@ -338,7 +340,7 @@ export function BlogClient({
                       </div>
                     </div>
                     <Link
-                      href={`/blog/${blog.slug}`}
+                      href={`/blogs/${blog.slug}`}
                       className="text-sm font-medium text-green-600 hover:text-green-700"
                       aria-label={`Read more about ${blog.title}`}
                     >

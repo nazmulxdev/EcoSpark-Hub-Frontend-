@@ -10,6 +10,7 @@ export const usersService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["admin-dashboard"],

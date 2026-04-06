@@ -36,6 +36,7 @@ import {
 } from "@/actions/client/watchlist.client";
 import { CommentsSection } from "@/components/comment/CommentsSection";
 import { VoteButton } from "@/components/vote/VoteButton";
+import Image from "next/image";
 
 interface Idea {
   id: string;
@@ -86,7 +87,6 @@ interface IdeaDetailClientProps {
 
 export function IdeaDetailClient({
   idea,
-  userRole,
   isAuthenticated,
   hasAccess,
   requiresAccess,
@@ -112,7 +112,6 @@ export function IdeaDetailClient({
     checkWatchlistStatus();
   }, [isAuthenticated, idea.id]);
 
-  const isMember = userRole === "MEMBER";
   const isLocked = !hasAccess && requiresAccess;
   const suggestedAction = idea.suggestedAction;
   const hasPendingPayment = idea.hasPendingPayment;
@@ -204,7 +203,7 @@ export function IdeaDetailClient({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Back Button */}
         <button
           onClick={() => router.back()}
@@ -219,11 +218,14 @@ export function IdeaDetailClient({
           {/* Hero Section */}
           <div className="relative">
             {idea.images && idea.images.length > 0 && (
-              <div className="h-64 md:h-96 overflow-hidden">
-                <img
+              <div className="relative h-64 md:h-96 w-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                <Image
                   src={idea.images[0]}
                   alt={idea.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px"
                 />
               </div>
             )}
@@ -439,12 +441,18 @@ export function IdeaDetailClient({
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {idea.images.slice(1).map((img, idx) => (
-                        <img
+                        <div
                           key={idx}
-                          src={img}
-                          alt={`${idea.title} - ${idx + 2}`}
-                          className="w-full h-32 object-cover rounded-lg"
-                        />
+                          className="relative aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-zinc-800"
+                        >
+                          <Image
+                            src={img}
+                            alt={`${idea.title} - ${idx + 2}`}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 300px"
+                          />
+                        </div>
                       ))}
                     </div>
                   </div>

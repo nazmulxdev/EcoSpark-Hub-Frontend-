@@ -31,6 +31,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { createIdea } from "@/actions/client/idea.client";
 import { IdeaAccessType } from "@/types/enums";
 import * as z from "zod";
+import Image from "next/image";
 
 interface Category {
   id: string;
@@ -98,6 +99,7 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState(INITIAL_FORM);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     return () => {
@@ -171,7 +173,7 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
       router.push("/member/dashboard/drafts");
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong", { id: toastId });
+      toast.error(`${error || "Something went wrong"}`, { id: toastId });
     } finally {
       setIsLoading(false);
     }
@@ -180,39 +182,57 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
-    if (images.length + files.length > 5) {
-      toast.error("You can upload maximum 5 images");
+    setUploadError(null);
+
+    if (files.length === 0) return;
+
+    if (images.length + files.length > 3) {
+      const errorMsg = `You can only upload maximum 3 images. You already have ${images.length}.`;
+      setUploadError(errorMsg);
+      toast.error(errorMsg);
+      e.target.value = "";
       return;
     }
 
     const validFiles: File[] = [];
     const validPreviews: string[] = [];
+    const errorList: string[] = [];
 
     files.forEach((file) => {
       if (!file.type.startsWith("image/")) {
-        toast.error(`"${file.name}" is not a valid image file`);
+        errorList.push(`"${file.name}" is not a valid image file`);
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(`"${file.name}" exceeds 5MB limit`);
+      if (file.size > 1.2 * 1024 * 1024) {
+        errorList.push(`"${file.name}" exceeds 1.2MB limit`);
         return;
       }
       validFiles.push(file);
       validPreviews.push(URL.createObjectURL(file));
     });
 
+    if (errorList.length > 0) {
+      const errorMsg = errorList.join(", ");
+      setUploadError(errorMsg);
+      errorList.forEach((error) => toast.error(error));
+      e.target.value = "";
+      return;
+    }
+
     if (validFiles.length > 0) {
       setImages((prev) => [...prev, ...validFiles]);
       setImagePreviews((prev) => [...prev, ...validPreviews]);
+      toast.success(`${validFiles.length} image(s) added successfully`);
     }
 
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    e.target.value = "";
   };
 
   const removeImage = (index: number) => {
     URL.revokeObjectURL(imagePreviews[index]);
     setImages((prev) => prev.filter((_, i) => i !== index));
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    setUploadError(null);
   };
 
   const handleAccessTypeChange = (type: IdeaAccessType) => {
@@ -241,21 +261,21 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-8"
+        className="text-center mb-6 sm:mb-8"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-4">
-          <Lightbulb className="w-8 h-8 text-white" />
+        <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-3 sm:mb-4">
+          <Lightbulb className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Create New Idea
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
           Share your sustainable solution with the community
         </p>
       </motion.div>
@@ -263,14 +283,14 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
       {/* Back Link */}
       <Link
         href="/member/dashboard/ideas"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-6"
+        className="inline-flex items-center gap-2 text-sm sm:text-base text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-4 sm:mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to My Ideas
       </Link>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         <FieldGroup>
           {/* Title */}
           <Field>
@@ -285,11 +305,13 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                   setFormValues((prev) => ({ ...prev, title: e.target.value }))
                 }
                 placeholder="Give your idea a catchy title"
-                className="pl-10 h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
+                className="pl-10 h-10 sm:h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
               />
             </div>
             {errors.title && (
-              <p className="text-sm text-red-500 mt-1">{errors.title}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.title}
+              </p>
             )}
           </Field>
 
@@ -304,15 +326,15 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                 setFormValues((prev) => ({ ...prev, categoryId: val }))
               }
             >
-              <SelectTrigger className="h-12 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
+              <SelectTrigger className="h-10 sm:h-12 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm sm:text-base">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg">
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-lg max-h-[200px] sm:max-h-[300px]">
                 {categories.map((cat) => (
                   <SelectItem
                     key={cat.id}
                     value={cat.id}
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm sm:text-base"
                   >
                     {cat.name}
                   </SelectItem>
@@ -320,7 +342,9 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
               </SelectContent>
             </Select>
             {errors.categoryId && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryId}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.categoryId}
+              </p>
             )}
           </Field>
 
@@ -329,7 +353,7 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
             <FieldLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Access Type *
             </FieldLabel>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
               {[
                 IdeaAccessType.FREE,
                 IdeaAccessType.MEMBER_ONLY,
@@ -339,14 +363,14 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                   key={type}
                   type="button"
                   onClick={() => handleAccessTypeChange(type)}
-                  className={`flex items-center justify-center gap-2 p-3 rounded-xl border transition-all ${
+                  className={`flex items-center justify-center gap-2 p-2 sm:p-3 rounded-xl border transition-all text-sm sm:text-base ${
                     formValues.accessType === type
                       ? "border-green-500 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400 shadow-sm"
                       : "border-gray-200 dark:border-zinc-700 hover:border-green-500 hover:bg-gray-50 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {getAccessTypeIcon(type)}
-                  <span className="text-sm font-medium capitalize">
+                  <span className="font-medium capitalize">
                     {type.replace("_", " ")}
                   </span>
                 </button>
@@ -374,11 +398,13 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                     }))
                   }
                   placeholder="Enter price"
-                  className="pl-10 h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
+                  className="pl-10 h-10 sm:h-12 bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                 />
               </div>
               {errors.price && (
-                <p className="text-sm text-red-500 mt-1">{errors.price}</p>
+                <p className="text-xs sm:text-sm text-red-500 mt-1">
+                  {errors.price}
+                </p>
               )}
             </Field>
           )}
@@ -398,10 +424,10 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                 }))
               }
               placeholder="What problem does your idea solve?"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.problemStatement && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
                 {errors.problemStatement}
               </p>
             )}
@@ -425,10 +451,10 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                 }))
               }
               placeholder="How does your idea solve the problem?"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.proposedSolution && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
                 {errors.proposedSolution}
               </p>
             )}
@@ -452,10 +478,12 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                 }))
               }
               placeholder="Provide a detailed explanation of your idea..."
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all outline-none resize-none text-sm sm:text-base"
             />
             {errors.description && (
-              <p className="text-sm text-red-500 mt-1">{errors.description}</p>
+              <p className="text-xs sm:text-sm text-red-500 mt-1">
+                {errors.description}
+              </p>
             )}
             <p className="text-xs text-gray-500 mt-1">
               {formValues.description.length}/5000 characters (minimum 50)
@@ -465,30 +493,63 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
           {/* Images Upload */}
           <div>
             <FieldLabel className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-              Images (Optional, max 5)
+              Images (Optional, max 3)
             </FieldLabel>
-            <div className="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-6 bg-gray-50 dark:bg-zinc-800/50">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+
+            {/* Error Display */}
+            {uploadError && (
+              <div className="mb-3 p-2 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-800">
+                <p className="text-xs text-red-600 dark:text-red-400">
+                  {uploadError}
+                </p>
+              </div>
+            )}
+
+            {/* Counter */}
+            <div className="mb-2 flex justify-between items-center">
+              <span className="text-xs text-gray-500">
+                {images.length}/3 images used
+              </span>
+              {images.length === 3 && (
+                <span className="text-xs text-amber-600">Maximum reached</span>
+              )}
+            </div>
+
+            <div className="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-4 sm:p-6 bg-gray-50 dark:bg-zinc-800/50">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
                 {imagePreviews.map((preview, index) => (
-                  <div key={index} className="relative group">
-                    <img
+                  <div
+                    key={index}
+                    className="relative w-full aspect-square group"
+                  >
+                    <Image
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      fill
+                      priority
+                      className="object-cover rounded-lg border border-gray-200 dark:border-zinc-700"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 150px"
                     />
-                    <Button
+                    <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
+                      aria-label="Remove image"
                     >
                       <X className="w-3 h-3" />
-                    </Button>
+                    </button>
                   </div>
                 ))}
-                {imagePreviews.length < 5 && (
-                  <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg cursor-pointer hover:border-green-500 transition-colors bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800">
-                    <Upload className="w-6 h-6 text-gray-400" />
-                    <span className="text-xs text-gray-500 mt-1">
+                {imagePreviews.length < 3 && (
+                  <label
+                    className={`flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                      images.length >= 3
+                        ? "border-gray-300 dark:border-zinc-600 bg-gray-100 dark:bg-zinc-800 cursor-not-allowed opacity-50"
+                        : "border-gray-300 dark:border-zinc-600 hover:border-green-500 bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
+                    <span className="text-xs text-gray-500 mt-1 text-center px-1">
                       Add Image
                     </span>
                     <input
@@ -498,26 +559,27 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
                       multiple
                       onChange={handleImageSelect}
                       className="hidden"
+                      disabled={images.length >= 3}
                     />
                   </label>
                 )}
               </div>
               <p className="text-xs text-gray-500 text-center">
-                Upload up to 5 images. JPG, PNG, GIF. Max 5MB each.
+                Upload up to 3 images. JPG, PNG, GIF. Max 1.2MB each.
               </p>
             </div>
           </div>
         </FieldGroup>
 
         {/* Info Box */}
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
-          <div className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-500 mt-0.5 shrink-0" />
+        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-3 sm:p-4 border border-blue-200 dark:border-blue-800">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-500 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-blue-800 dark:text-blue-400">
+              <h3 className="font-semibold text-sm sm:text-base text-blue-800 dark:text-blue-400">
                 What happens next?
               </h3>
-              <p className="text-sm text-blue-700 dark:text-blue-500 mt-1">
+              <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-500 mt-1">
                 After creating your idea, you can submit it for review. Admin
                 will review your idea and either approve it or provide feedback.
                 Once approved, your idea will be visible to the community.
@@ -530,16 +592,16 @@ export function CreateIdeaClient({ categories }: CreateIdeaClientProps) {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 text-base font-medium bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-10 sm:h-12 text-sm sm:text-base font-medium bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-2" />
               Creating Idea...
             </>
           ) : (
             <>
-              <Plus className="w-5 h-5 mr-2" />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Create Idea
             </>
           )}

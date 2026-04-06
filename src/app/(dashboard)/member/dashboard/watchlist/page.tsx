@@ -1,5 +1,3 @@
-// app/(dashboard)/member/dashboard/watchlist/page.tsx (SIMPLIFIED)
-
 import { getWatchlist } from "@/actions/client/watchlist.client";
 import { WatchlistClient } from "@/components/modules/member/wishlist/WatchlistClient";
 

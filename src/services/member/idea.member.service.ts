@@ -15,6 +15,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["ideas"],
@@ -48,6 +49,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["ideas"],
@@ -83,6 +85,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["my-ideas"],
@@ -118,6 +121,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["my-drafts"],
@@ -152,6 +156,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["my-ideas"],
@@ -211,9 +216,21 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         body: formData,
       });
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        return {
+          data: null,
+          error: {
+            message: `Server returned non-JSON response: ${res.status} ${res.statusText}`,
+            status: res.status,
+          },
+        };
+      }
 
       if (!data.success) {
         return {
@@ -263,6 +280,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         body: formData,
       });
       const data = await res.json();
@@ -293,6 +311,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
       });
       const data = await res.json();
 
@@ -323,6 +342,7 @@ export const ideaMemberService = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ status: "UNDER_REVIEW" }),
       });
       const data = await res.json();
@@ -353,6 +373,7 @@ export const ideaMemberService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["member-dashboard"],

@@ -1,11 +1,8 @@
 import { createAuthClient } from "better-auth/react"; // make sure to import from better-auth/react
 
 export const authClient = createAuthClient({
-  //you can pass client configuration here
-  // baseURL: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth`,
-  baseURL: process.env.NEXT_PUBLIC_APP_URL
-    ? `${process.env.NEXT_PUBLIC_APP_URL}/api/auth`
-    : "/api/auth",
+  baseURL: "https://ecospark-hub.vercel.app",
+  // baseURL: "http://localhost:5000",
   fetchOptions: { credentials: "include" },
 
   plugins: [
@@ -33,6 +30,6 @@ export const authClient = createAuthClient({
 export const signInWithGoogle = async (callbackURL?: string) => {
   return await authClient.signIn.social({
     provider: "google",
-    callbackURL: callbackURL || `${process.env.NEXT_PUBLIC_APP_URL}`,
+    callbackURL: callbackURL || "https://ecospark-hub.vercel.app",
   });
 };

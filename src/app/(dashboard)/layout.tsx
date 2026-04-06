@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAuthSession } from "@/actions/client/auth.client";
 import { DashboardClientLayout } from "@/components/modules/dashboard/DashbadLayout";
 import { redirect } from "next/navigation";

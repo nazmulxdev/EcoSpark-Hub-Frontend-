@@ -4,11 +4,15 @@ import { authService } from "./services/auth/auth.service";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  const publicPaths = ["/", "/login", "/signup", "/tutors", "/contact"];
+  const isPublicPath =
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/about" ||
+    pathname.startsWith("/ideas") ||
+    pathname.startsWith("/blogs");
 
-  if (publicPaths.includes(pathname)) {
-    return NextResponse.next();
-  }
+  if (isPublicPath) return NextResponse.next();
 
   const { data, error } = await authService.getSession();
 
@@ -19,35 +23,54 @@ export async function proxy(request: NextRequest) {
   }
 
   const userRole = data.user?.role;
-  console.log(userRole);
 
-  // const roleBasedRoutes: Record<string, string[]> = {
-  //   "/dashboard": ["ADMIN", "TUTOR", "STUDENT"],
-  //   "/dashboard/admin/:path*": ["ADMIN"],
-  //   "/dashboard/tutor/:path*": ["TUTOR"],
-  //   "/dashboard/student/:path*": ["STUDENT"],
-  //   "/tutors/:id": ["ADMIN", "TUTOR", "STUDENT"],
-  // };
+  if (!userRole) {
+    return NextResponse.redirect(
+      new URL(`/login?redirect=${pathname}`, request.url),
+    );
+  }
 
-  // for (const path in roleBasedRoutes) {
-  //   const regexStr =
-  //     "^" + path.replace(/:[^/]+\*/g, ".*").replace(/:[^/]+/g, "[^/]+") + "$";
+  const roleBasedRoutes: Record<string, string[]> = {
+    "/admin/dashboard/:path*": ["ADMIN"],
+    "/member/dashboard/:path*": ["MEMBER"],
+    "/dashboard/:path*": ["USER"],
+    "/ideas/:path*": ["ADMIN", "MEMBER", "USER"],
+    "/blogs/:path*": ["ADMIN", "MEMBER", "USER"],
+  };
+  for (const path in roleBasedRoutes) {
+    const regexStr =
+      "^" + path.replace(/:[^/]+\*/g, ".*").replace(/:[^/]+/g, "[^/]+") + "$";
 
-  //   const dynamicPath = new RegExp(regexStr);
+    const dynamicPath = new RegExp(regexStr);
 
-  //   if (dynamicPath.test(pathname)) {
-  //     if (!roleBasedRoutes[path].includes(userRole)) {
-  //       return NextResponse.redirect(
-  //         new URL(`/login?redirect=${pathname}`, request.url),
-  //       );
-  //     }
-  //     return NextResponse.next();
-  //   }
-  // }
+    if (dynamicPath.test(pathname)) {
+      if (!userRole || !roleBasedRoutes[path]!.includes(userRole)) {
+        if (userRole === "ADMIN") {
+          return NextResponse.redirect(
+            new URL("/admin/dashboard", request.url),
+          );
+        }
+        if (userRole === "MEMBER") {
+          return NextResponse.redirect(
+            new URL("/member/dashboard", request.url),
+          );
+        }
+
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+      return NextResponse.next();
+    }
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/tutors/:path*"],
+  matcher: [
+    "/admin/dashboard/:path*",
+    "/member/dashboard/:path*",
+    "/dashboard/:path*",
+    "/ideas/:path*",
+    "/blogs/:path*",
+  ],
 };

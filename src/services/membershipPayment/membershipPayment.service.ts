@@ -13,6 +13,7 @@ export const membershipPaymentService = {
             Cookie: cookieStore.toString(),
             "Content-Type": "application/json",
           },
+          credentials: "include",
           cache: "no-store",
         },
       );
@@ -46,6 +47,7 @@ export const membershipPaymentService = {
             Cookie: cookieStore.toString(),
             "Content-Type": "application/json",
           },
+          credentials: "include",
           cache: "no-store",
         },
       );
@@ -77,6 +79,7 @@ export const membershipPaymentService = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
+        credentials: "include",
         cache: "no-store",
       });
       const data = await res.json();
@@ -107,6 +110,7 @@ export const membershipPaymentService = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
+        credentials: "include",
         cache: "no-store",
       });
       const data = await res.json();

@@ -206,7 +206,7 @@ export function MemberDashboardClient({
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-full mx-auto px-4 py-8">
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -346,7 +346,7 @@ export function MemberDashboardClient({
             <div className="text-center py-8">
               <Lightbulb className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500">No ideas yet</p>
-              <Link href="/member/dashboard/ideas/new">
+              <Link href="/member/dashboard/create">
                 <Button variant="outline" size="sm" className="mt-3">
                   Create Your First Idea
                 </Button>
@@ -361,10 +361,7 @@ export function MemberDashboardClient({
                 const AccessIcon = access.icon;
 
                 return (
-                  <Link
-                    key={idea.id}
-                    href={`/member/dashboard/ideas/${idea.slug}`}
-                  >
+                  <Link key={idea.id} href={`/ideas/${idea.slug}`}>
                     <div className="p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
                       <div className="flex items-start justify-between flex-wrap gap-2">
                         <div className="flex-1">

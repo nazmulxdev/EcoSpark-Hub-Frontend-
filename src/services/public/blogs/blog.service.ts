@@ -13,6 +13,7 @@ export const blogService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["blogs"],
@@ -45,6 +46,7 @@ export const blogService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
+        credentials: "include",
         cache: "no-store",
         next: {
           tags: ["blogs"],

@@ -168,7 +168,7 @@ async function BecomeMemberWrapper({
 function BecomeMemberLoading() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <div className="w-20 h-20 bg-gray-200 dark:bg-zinc-800 rounded-2xl mx-auto mb-6 animate-pulse" />
           <div className="h-10 w-64 bg-gray-200 dark:bg-zinc-800 rounded-lg mx-auto mb-4 animate-pulse" />

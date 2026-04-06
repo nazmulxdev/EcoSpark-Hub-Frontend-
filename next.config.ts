@@ -1,26 +1,33 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
   reactCompiler: true,
   experimental: {
     serverActions: {
-      bodySizeLimit: "20mb",
+      bodySizeLimit: "50mb",
     },
   },
-
-  // better-auth proxy
   async rewrites() {
     return [
       {
-        // Explicitly map auth requests
         source: "/api/auth/:path*",
-        destination: process.env.NEXT_PUBLIC_BACKEND_URL + "/api/auth/:path*",
+        destination: `https://ecosoark-hub.vercel.app/api/auth/:path*`,
       },
       {
-        // Explicitly map v1 API requests
         source: "/api/v1/:path*",
-        destination: process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1/:path*",
+        destination: `https://ecosoark-hub.vercel.app/api/v1/:path*`,
       },
     ];
   },

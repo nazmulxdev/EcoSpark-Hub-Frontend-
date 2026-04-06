@@ -15,6 +15,7 @@ export const ideaServicePublic = {
             "Content-Type": "application/json",
           },
           cache: "no-store",
+          credentials: "include",
         },
       );
       const data = await res.json();
@@ -48,6 +49,7 @@ export const ideaServicePublic = {
             "Content-Type": "application/json",
           },
           cache: "no-store",
+          credentials: "include",
         },
       );
       const data = await res.json();
@@ -80,6 +82,7 @@ export const ideaServicePublic = {
             Cookie: cookieStore.toString(),
             "Content-Type": "application/json",
           },
+          credentials: "include",
           cache: "no-store",
         },
       );
@@ -116,6 +119,7 @@ export const ideaServicePublic = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
+        credentials: "include",
         cache: "no-store",
       });
       const data = await res.json();
@@ -149,6 +153,7 @@ export const ideaServicePublic = {
             Cookie: cookieStore.toString(),
             "Content-Type": "application/json",
           },
+          credentials: "include",
           cache: "no-store",
         },
       );
@@ -181,6 +186,7 @@ export const ideaServicePublic = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
+        credentials: "include",
         cache: "no-store",
       });
       const data = await res.json();
@@ -212,6 +218,7 @@ export const ideaServicePublic = {
           headers: {
             Cookie: cookieStore.toString(),
           },
+          credentials: "include",
           cache: "no-store",
         },
       );

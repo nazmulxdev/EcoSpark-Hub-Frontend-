@@ -15,6 +15,7 @@ export const blogService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["blogs"],
         },
@@ -47,6 +48,7 @@ export const blogService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
         next: {
           tags: ["blogs"],
         },
@@ -97,6 +99,7 @@ export const blogService = {
           Cookie: cookieStore.toString(),
         },
         body: formData,
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -146,6 +149,7 @@ export const blogService = {
           Cookie: cookieStore.toString(),
         },
         body: formData,
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -175,6 +179,7 @@ export const blogService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials: "include",
       });
       const data = await res.json();
 

@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { IdeaAccessType } from "@/types/enums";
+import Image from "next/image";
 
 interface PurchasedIdea {
   id: string;
@@ -100,7 +101,7 @@ export function PurchasedIdeasClient({
 
   if (purchases.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-full mx-auto px-4 py-12">
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 dark:bg-zinc-800 rounded-full mb-4">
             <ShoppingBag className="w-10 h-10 text-gray-400" />
@@ -122,7 +123,7 @@ export function PurchasedIdeasClient({
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-full mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <ShoppingBag className="w-6 h-6 text-green-500" />
@@ -155,9 +156,11 @@ export function PurchasedIdeasClient({
                 {/* Image Section */}
                 {imageUrl ? (
                   <div className="md:w-48 h-48 md:h-auto overflow-hidden">
-                    <img
+                    <Image
                       src={imageUrl}
                       alt={idea.title}
+                      fill
+                      priority
                       className="w-full h-full object-cover"
                     />
                   </div>

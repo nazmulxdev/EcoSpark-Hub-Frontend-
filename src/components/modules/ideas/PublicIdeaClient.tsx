@@ -34,6 +34,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { IdeaAccessType } from "@/types/enums";
+import Image from "next/image";
 
 interface Idea {
   id: string;
@@ -424,7 +425,7 @@ export function PublicIdeasClient({
                     <SelectTrigger className="w-full h-11 bg-white dark:bg-zinc-900">
                       <SelectValue placeholder="All Access" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 shadow-lg rounded-lg">
                       <SelectItem value="all">All Access</SelectItem>
                       <SelectItem value={IdeaAccessType.FREE}>Free</SelectItem>
                       <SelectItem value={IdeaAccessType.PAID}>Paid</SelectItem>
@@ -445,7 +446,7 @@ export function PublicIdeasClient({
                     <SelectTrigger className="w-full h-11 bg-white dark:bg-zinc-900">
                       <SelectValue placeholder="Sort By" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 shadow-lg rounded-lg">
                       {sortOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>
                           {opt.label}
@@ -564,9 +565,10 @@ export function PublicIdeasClient({
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
                     {imageUrl ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt={idea.title}
+                        fill
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
@@ -613,9 +615,11 @@ export function PublicIdeasClient({
                     {/* Author */}
                     <div className="flex items-center gap-2 mb-3">
                       {idea.author.image ? (
-                        <img
+                        <Image
                           src={idea.author.image}
                           alt={idea.author.name}
+                          width={24}
+                          height={24}
                           className="w-6 h-6 rounded-full object-cover"
                         />
                       ) : (

@@ -1,10 +1,10 @@
-import { FeaturesSection } from "@/components/modules/home/FeaturesSectin";
+export const dynamic = "force-dynamic";
 
+import { FeaturesSection } from "@/components/modules/home/FeaturesSectin";
 import { CTASection } from "@/components/modules/home/CTASection";
 import { HeroSlider } from "@/components/modules/home/HeroSlider";
 import { FeaturedIdeas } from "@/components/modules/home/FeaturedIdeas";
 import { getAllIdeasPublic } from "@/actions/client/idea.client";
-import { WhyJoinSection } from "@/components/modules/home/WhyJoinSection";
 import { CommunityImpactSection } from "@/components/modules/home/CommunityImpactSection";
 
 export const metadata = {

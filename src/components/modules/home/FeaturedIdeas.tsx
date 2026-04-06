@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { IdeaAccessType } from "@/types/enums";
+import Image from "next/image";
 
 interface Idea {
   id: string;
@@ -119,9 +120,11 @@ export function FeaturedIdeas({ ideas }: FeaturedIdeasProps) {
                   className="block relative h-48 overflow-hidden"
                 >
                   {imageUrl ? (
-                    <img
+                    <Image
                       src={imageUrl}
                       alt={idea.title}
+                      fill
+                      priority
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -167,9 +170,11 @@ export function FeaturedIdeas({ ideas }: FeaturedIdeasProps) {
                   {/* Author */}
                   <div className="flex items-center gap-2 mb-3">
                     {idea.author.image ? (
-                      <img
+                      <Image
                         src={idea.author.image}
                         alt={idea.author.name}
+                        width={20}
+                        height={20}
                         className="w-5 h-5 rounded-full object-cover"
                       />
                     ) : (

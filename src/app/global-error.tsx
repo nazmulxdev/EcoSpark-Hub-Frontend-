@@ -1,5 +1,8 @@
+// app/global-error.tsx
+
 "use client";
 
+import { ErrorPage } from "@/components/shared/Error/ErrorPage";
 import { useEffect } from "react";
 
 export default function GlobalError({
@@ -10,25 +13,20 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    // Log the error to an error reporting service
+    console.error("Global error:", error);
   }, [error]);
 
   return (
     <html>
       <body>
-        <div className="min-h-screen flex items-center justify-center px-4">
-          <div className="text-center max-w-md space-y-6">
-            <div className="space-y-2">
-              <h1 className="headline-md">Critical Error</h1>
-              <p className="text-foreground-muted">
-                Something went terribly wrong. Please try again later.
-              </p>
-            </div>
-            <button onClick={reset} className="btn-primary">
-              Try again
-            </button>
-          </div>
-        </div>
+        <ErrorPage
+          error={error}
+          title="Something Went Wrong"
+          message="We've encountered an unexpected error. Our team has been notified."
+          reset={reset}
+          showHomeButton={true}
+        />
       </body>
     </html>
   );

@@ -103,12 +103,12 @@ export function DashboardClientLayout({
           icon: FileText,
         },
         { name: "Drafts", href: "/member/dashboard/drafts", icon: Eye },
-        { name: "Watchlist", href: "/member/dashboard/watchlist", icon: Star },
         {
           name: "Purchased Ideas",
           href: "/member/dashboard/purchased",
           icon: TrendingUp,
         },
+        { name: "Watchlist", href: "/member/dashboard/watchlist", icon: Star },
       ];
     }
 
@@ -120,12 +120,12 @@ export function DashboardClientLayout({
         href: "/dashboard/become-member",
         icon: UserPlus,
       },
-      { name: "Watchlist", href: "/dashboard/watchlist", icon: Star },
       {
         name: "Purchased Ideas",
         href: "/dashboard/purchased",
         icon: Lightbulb,
       },
+      { name: "Watchlist", href: "/dashboard/watchlist", icon: Star },
     ];
   };
 

@@ -14,12 +14,16 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-display",
 });
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_APP_URL || "https://ecospark-hub.vercel.app";
+
 export const metadata: Metadata = {
   title: "EcoSpark Hub - Sustainable Ideas Community",
   description:
     "Connecting visionary minds with sustainable solutions to build a regenerative future for all.",
   keywords: "sustainability, eco-friendly, green ideas, community, environment",
-  authors: [{ name: "EcoSpark Hub" }],
+  authors: [{ name: "Md.Nazmul Hossen", url: "https://ecosparkhub.com" }],
+  metadataBase: new URL(baseUrl),
   openGraph: {
     title: "EcoSpark Hub - Sustainable Ideas Community",
     description:

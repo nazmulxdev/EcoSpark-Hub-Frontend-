@@ -21,6 +21,7 @@ import {
   becomeMemberWithPayLater,
   initiatePayment,
 } from "@/actions/client/membershipPayment.action";
+import { env } from "@/config/env";
 
 interface BecomeMemberClientProps {
   userId: string;
@@ -205,7 +206,7 @@ export function BecomeMemberClient({
             <div className="p-8 text-center">
               <div className="mb-6">
                 <span className="text-5xl font-bold text-gray-900 dark:text-white">
-                  $20
+                  ${env.NEXT_PUBLIC_MEMBERSHIP_PRICE}
                 </span>
                 <span className="text-gray-500 dark:text-gray-400"> USD</span>
               </div>

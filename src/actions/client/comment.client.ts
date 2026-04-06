@@ -14,6 +14,7 @@ export const getComments = async (ideaId: string) => {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
       cache: "no-store",
       next: {
         tags: [`comments-${ideaId}`],
@@ -45,6 +46,7 @@ export const createComment = async (
         Cookie: cookieStore.toString(),
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ ideaId, content, parentId }),
     });
     const data = await res.json();
@@ -70,6 +72,7 @@ export const updateComment = async (commentId: string, content: string) => {
         Cookie: cookieStore.toString(),
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ content }),
     });
     const data = await res.json();
@@ -93,6 +96,7 @@ export const deleteComment = async (commentId: string, ideaId: string) => {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      credentials: "include",
     });
     const data = await res.json();
 
