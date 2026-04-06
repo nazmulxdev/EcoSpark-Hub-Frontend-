@@ -255,7 +255,7 @@ export function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-sm z-50 bg-white dark:bg-zinc-950 shadow-2xl"
+            className="fixed top-0 right-0 bottom-0 w-full max-w-4/5 z-50 bg-white dark:bg-zinc-950 shadow-2xl"
           >
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-800">
